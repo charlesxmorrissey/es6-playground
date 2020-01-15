@@ -1,0 +1,92 @@
+{
+  "name": "es6-playground",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Charles X. Morrissey",
+  "private": true,
+  "browserslist": [
+    "> 0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "scripts": {
+    "build": "webpack --config build/webpack.config.prod.js",
+    "format": "prettier --write '**/*.js'",
+    "lint": "eslint --ext .js build src",
+    "lint:fix": "eslint --fix build src",
+    "start": "webpack-dev-server --progress --config build/webpack.config.dev.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "yarn format",
+      "yarn lint",
+      "jest --bail --findRelatedTests",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "dependencies": {
+    "core-js": "3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.6.0",
+    "babel-loader": "^8.0.0",
+    "clean-webpack-plugin": "^1.0.0",
+    "eslint": "^5.11.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-formatter-pretty": "^2.0.0",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "husky": "^1.2.1",
+    "jest": "^24.8.0",
+    "lint-staged": "^8.1.0",
+    "prettier": "^1.12.1",
+    "terser-webpack-plugin": "^2.3.1",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.3",
+    "webpack-merge": "^4.1.2"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "testMatch": [
+      "<rootDir>/test/**/?(*.)(spec|test).js"
+    ],
+    "coverageDirectory": ".jest_coverage",
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "node"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.js$"
+    ],
+    "snapshotSerializers": []
+  }
+}
