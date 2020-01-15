@@ -3,6 +3,9 @@
 ## Build Setup
 
 ``` bash
+# Clone the repo
+git clone https://github.com/charlesxmorrissey/es6-playground.git
+
 # Install dependencies
 yarn
 
