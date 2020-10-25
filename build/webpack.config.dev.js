@@ -1,13 +1,14 @@
 'use strict'
 
-const config = require('./config.js')
 const webpack = require('webpack')
-const webpackConfig = require('./webpack.config.base')
-const webpackMerge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 
-const webpackDevConfig = webpackMerge(webpackConfig, {
+const config = require('./config.js')
+const webpackConfig = require('./webpack.config.base')
+
+const webpackDevConfig = merge(webpackConfig, {
   mode: 'development',
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'eval-cheap-source-map',
 
   devServer: {
     ...config.appStats,
@@ -16,6 +17,7 @@ const webpackDevConfig = webpackMerge(webpackConfig, {
     compress: true,
     hot: true,
     overlay: true,
+    publicPath: '/',
   },
 
   plugins: [

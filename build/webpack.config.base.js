@@ -1,8 +1,10 @@
 'use strict'
 
-const config = require('./config.js')
 const eslintFormatter = require('eslint-formatter-pretty')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ESLintPlugin = require('eslint-webpack-plugin')
+
+const config = require('./config.js')
 
 const webpackConfig = {
   ...config.appStats,
@@ -12,9 +14,8 @@ const webpackConfig = {
   },
 
   output: {
-    path: config.appBuild,
     chunkFilename: '[name].chunk.js',
-    filename: '[name].js',
+    path: config.appBuild,
   },
 
   resolve: {
@@ -29,16 +30,6 @@ const webpackConfig = {
     rules: [
       {
         test: /\.js$/,
-        loader: 'eslint-loader',
-        include: config.appSrc,
-        enforce: 'pre',
-        options: {
-          emitWarning: true,
-          formatter: eslintFormatter,
-        },
-      },
-      {
-        test: /\.js$/,
         loader: 'babel-loader',
         include: config.appSrc,
         options: {
@@ -49,6 +40,12 @@ const webpackConfig = {
   },
 
   plugins: [
+    new ESLintPlugin({
+      context: config.appSrc,
+      emitWarning: true,
+      formatter: eslintFormatter,
+    }),
+
     new HtmlWebpackPlugin({
       description: config.appTemplateMeta.description,
       template: config.appTemplateMeta.template,

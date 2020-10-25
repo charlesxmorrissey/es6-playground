@@ -1,14 +1,14 @@
 'use strict'
 
-const config = require('./config.js')
 const webpack = require('webpack')
-const webpackConfig = require('./webpack.config.base')
-const webpackMerge = require('webpack-merge')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { merge } = require('webpack-merge')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
-const webpackProdConfig = webpackMerge(webpackConfig, {
+const config = require('./config.js')
+const webpackConfig = require('./webpack.config.base')
+
+const webpackProdConfig = merge(webpackConfig, {
   mode: 'production',
   devtool: config.appProdSourceMap ? 'source-map' : false,
 
@@ -21,10 +21,16 @@ const webpackProdConfig = webpackMerge(webpackConfig, {
     minimize: true,
     minimizer: [
       new TerserPlugin({
-        sourceMap: config.appProdSourceMap,
         test: /\.js(\?.*)?$/i,
+        terserOptions: {
+          output: {
+            comments: false,
+          },
+        },
+        extractComments: false,
       }),
     ],
+
     splitChunks: {
       cacheGroups: {
         commons: {
@@ -44,26 +50,9 @@ const webpackProdConfig = webpackMerge(webpackConfig, {
     }),
 
     // Removes the `dist` directory before compilation.
-    new CleanWebpackPlugin([config.appBuild], {
-      root: config.appBase,
-    }),
-
-    new HtmlWebpackPlugin({
-      description: config.appTemplateMeta.description,
-      minify: {
-        collapseWhitespace: true,
-        keepClosingSlash: true,
-        minifyCSS: true,
-        minifyJS: true,
-        minifyURLs: true,
-        removeComments: true,
-        removeEmptyAttributes: true,
-        removeRedundantAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        removeScriptTypeAttributes: true,
-      },
-      template: config.appTemplateMeta.template,
-      title: config.appTemplateMeta.description,
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [config.appBuild],
+      verbose: true,
     }),
   ],
 })
