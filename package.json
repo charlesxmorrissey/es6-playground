@@ -32,9 +32,6 @@
       "pre-commit": "lint-staged"
     }
   },
-  "dependencies": {
-    "core-js": "3"
-  },
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.0.0",
