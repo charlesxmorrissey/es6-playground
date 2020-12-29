@@ -1,8 +1,8 @@
 'use strict'
 
-const config = require('./config.js')
 const eslintFormatter = require('eslint-formatter-pretty')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const config = require('./config')
 
 const webpackConfig = {
   ...config.appStats,
