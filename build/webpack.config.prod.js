@@ -19,6 +19,30 @@ const webpackProdConfig = merge(webpackConfig, {
     filename: 'js/[name].[chunkhash:8].js',
   },
 
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                auto: true,
+                exportLocalsConvention: 'camelCase',
+                localIdentContext: config.appSrc,
+                localIdentName: '[hash:base64]',
+              },
+              sourceMap: config.appProdSourceMap,
+            },
+          },
+          'postcss-loader',
+        ],
+      },
+    ],
+  },
+
   optimization: {
     minimize: true,
     minimizer: [
@@ -56,30 +80,6 @@ const webpackProdConfig = merge(webpackConfig, {
     },
   },
 
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                auto: true,
-                exportLocalsConvention: 'camelCase',
-                localIdentContext: config.appSrc,
-                localIdentName: '[hash:base64]',
-              },
-              sourceMap: config.appProdSourceMap,
-            },
-          },
-          'postcss-loader',
-        ],
-      },
-    ],
-  },
-
   plugins: [
     // Makes some environment variables available to our JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }.
@@ -91,6 +91,12 @@ const webpackProdConfig = merge(webpackConfig, {
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [config.appBuild],
       verbose: true,
+    }),
+
+    // Extracts CSS styles into it's own CSS bundle.
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[contenthash].css',
+      chunkFilename: '[id].css',
     }),
   ],
 })
