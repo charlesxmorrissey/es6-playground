@@ -1,4 +1,5 @@
 # ES6 Playground
+ES6 boilerplate starter app for rapid development.
 
 ## Build Setup
 
@@ -10,7 +11,7 @@ git clone https://github.com/charlesxmorrissey/es6-playground.git
 yarn
 
 # Serve with hot reload at localhost:8080
-yarn start
+yarn dev
 
 # Build for production with minification
 yarn build
