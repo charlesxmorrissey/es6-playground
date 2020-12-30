@@ -1,10 +1,13 @@
 'use strict'
 
 const webpack = require('webpack')
-const webpackConfig = require('./webpack.config.base')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { merge } = require('webpack-merge')
+
+const webpackConfig = require('./webpack.config.base')
 const config = require('./config')
 
 const webpackProdConfig = merge(webpackConfig, {
@@ -22,6 +25,22 @@ const webpackProdConfig = merge(webpackConfig, {
       new TerserPlugin({
         sourceMap: config.appProdSourceMap,
         test: /\.js(\?.*)?$/i,
+        terserOptions: {
+          output: {
+            comments: false,
+          },
+        },
+        extractComments: false,
+      }),
+      new OptimizeCSSAssetsPlugin({
+        cssProcessorPluginOptions: {
+          preset: [
+            'advanced',
+            {
+              discardComments: { removeAll: true },
+            },
+          ],
+        },
       }),
     ],
     splitChunks: {
@@ -33,6 +52,28 @@ const webpackProdConfig = merge(webpackConfig, {
         },
       },
     },
+  },
+
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                exportLocalsConvention: 'camelCase',
+                localIdentContext: config.appSrc,
+                localIdentName: '[hash:base64]',
+              },
+              sourceMap: config.appProdSourceMap,
+            },
+          },
+        ],
+      },
+    ],
   },
 
   plugins: [
