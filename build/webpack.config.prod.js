@@ -3,9 +3,9 @@
 const webpack = require('webpack')
 const webpackConfig = require('./webpack.config.base')
 const webpackMerge = require('webpack-merge')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const config = require('./config')
 
 const webpackProdConfig = webpackMerge(webpackConfig, {
@@ -44,8 +44,9 @@ const webpackProdConfig = webpackMerge(webpackConfig, {
     }),
 
     // Removes the `dist` directory before compilation.
-    new CleanWebpackPlugin([config.appBuild], {
-      root: config.appBase,
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [config.appBuild],
+      verbose: true,
     }),
 
     new HtmlWebpackPlugin({
