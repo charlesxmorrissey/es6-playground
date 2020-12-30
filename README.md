@@ -1,5 +1,5 @@
 # ES6 Playground
-ES6 boilerplate starter app for rapid development.
+A ES6 boilerplate starter app for rapid development.
 
 ## Build Setup
 
