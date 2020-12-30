@@ -2,13 +2,12 @@
 
 const webpack = require('webpack')
 const webpackConfig = require('./webpack.config.base')
-const webpackMerge = require('webpack-merge')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const { merge } = require('webpack-merge')
 const config = require('./config')
 
-const webpackProdConfig = webpackMerge(webpackConfig, {
+const webpackProdConfig = merge(webpackConfig, {
   mode: 'production',
   devtool: config.appProdSourceMap ? 'source-map' : false,
 
@@ -47,24 +46,6 @@ const webpackProdConfig = webpackMerge(webpackConfig, {
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: [config.appBuild],
       verbose: true,
-    }),
-
-    new HtmlWebpackPlugin({
-      description: config.appTemplateMeta.description,
-      minify: {
-        collapseWhitespace: true,
-        keepClosingSlash: true,
-        minifyCSS: true,
-        minifyJS: true,
-        minifyURLs: true,
-        removeComments: true,
-        removeEmptyAttributes: true,
-        removeRedundantAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        removeScriptTypeAttributes: true,
-      },
-      template: config.appTemplateMeta.template,
-      title: config.appTemplateMeta.description,
     }),
   ],
 })
