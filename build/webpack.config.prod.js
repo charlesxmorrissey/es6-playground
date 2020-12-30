@@ -1,8 +1,8 @@
 'use strict'
 
 const webpack = require('webpack')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { merge } = require('webpack-merge')
@@ -32,10 +32,11 @@ const webpackProdConfig = merge(webpackConfig, {
         },
         extractComments: false,
       }),
-      new OptimizeCSSAssetsPlugin({
-        cssProcessorPluginOptions: {
+
+      new CssMinimizerPlugin({
+        minimizerOptions: {
           preset: [
-            'advanced',
+            'default',
             {
               discardComments: { removeAll: true },
             },
@@ -43,6 +44,7 @@ const webpackProdConfig = merge(webpackConfig, {
         },
       }),
     ],
+
     splitChunks: {
       cacheGroups: {
         commons: {
@@ -64,6 +66,7 @@ const webpackProdConfig = merge(webpackConfig, {
             loader: 'css-loader',
             options: {
               modules: {
+                auto: true,
                 exportLocalsConvention: 'camelCase',
                 localIdentContext: config.appSrc,
                 localIdentName: '[hash:base64]',
@@ -71,6 +74,7 @@ const webpackProdConfig = merge(webpackConfig, {
               sourceMap: config.appProdSourceMap,
             },
           },
+          'postcss-loader',
         ],
       },
     ],
